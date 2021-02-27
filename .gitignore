@@ -356,3 +356,6 @@ sketch
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/node,yarn,react,python,flask,database
+
+# Configuration files
+config.py

@@ -10,7 +10,11 @@ import os
 
 
 # Defaults for flask configuration
-IP = os.environ.get('IP', '127.0.0.1')
-PORT = os.environ.get('PORT', 5000)
-SERVER_NAME = os.environ.get('SERVER_NAME', 'localhost:5000')
+IP = os.environ.get('IP', default='127.0.0.1')
+PORT = os.environ.get('PORT', default=5000)
+SERVER_NAME = os.environ.get('SERVER_NAME', default='localhost:5000')
 SECRET_KEY = os.environ.get('SESSION_KEY', default=''.join(secrets.token_hex(16)))
+
+# OAuth2 settings
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', default='')
+GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', default='')
