@@ -1,13 +1,35 @@
 import './App.css';
+import React, { Component } from 'react';
 import Cookies from 'js-cookie';
-import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <p>{Cookies.get('email')}</p>
-    </div>
-  );
+class App extends Component {
+  state = {
+    email:
+      Cookies.get('email') != null ? Cookies.get('email') : 'Not Logged In',
+    loggedIn: Cookies.get('email') != null
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <p>
+          {this.state.loggedIn ? (
+            this.state.email
+          ) : (
+            <a
+              href={
+                process.env.REACT_APP_API_HOST +
+                '/api/v0/login?redirect=' +
+                process.env.REACT_APP_HOST
+              }
+            >
+              Log in!
+            </a>
+          )}
+        </p>
+      </div>
+    );
+  }
 }
 
 export default App;
