@@ -359,3 +359,4 @@ sketch
 
 # Configuration files
 config.py
+.env

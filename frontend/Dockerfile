@@ -5,6 +5,10 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 ENV NODE_ENV production
+ARG REACT_APP_HOST
+ENV REACT_APP_HOST $REACT_APP_HOST
+ARG REACT_APP_API_HOST
+ENV REACT_APP_API_HOST $REACT_APP_API_HOST
 COPY . .
 RUN yarn build
 

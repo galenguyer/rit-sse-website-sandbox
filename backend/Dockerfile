@@ -12,5 +12,4 @@ RUN pip install -r requirements.txt
 RUN apk del gcc musl-dev python3-dev libffi-dev openssl-dev cargo rust
 ADD . /app
 
-ENTRYPOINT ["gunicorn", "api:APP"]
-CMD ["--bind=0.0.0.0:5000"]
+ENTRYPOINT ["gunicorn", "api:APP", "--bind=0.0.0.0:5000"]

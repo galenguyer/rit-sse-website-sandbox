@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: frontend
+      args:
+        - "REACT_APP_API_HOST=http://localhost:5000"
+        - "REACT_APP_HOST=http://localhost"
+    container_name: rit-sse-website-frontend
+    ports:
+      - "80:80"
+  backend:
+    build: backend
+    container_name: rit-sse-website-backend
+    environment: 
+      - "SECRET_KEY=${BACKEND_SECRET_KEY}"
+      - "GOOGLE_CLIENT_ID=${BACKEND_GOOGLE_CLIENT_ID}"
+      - "GOOGLE_CLIENT_SECRET=${BACKEND_GOOGLE_CLIENT_SECRET}"
+    ports:
+      - "5000:5000"
