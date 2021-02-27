@@ -24,10 +24,10 @@ oauth.register(
     }
 )
 
-@APP.route('/')
-def _get_index():
+@APP.route('/api/v0/user')
+def _get_api_v0_user():
     user = session.get('user')
-    return jsonify(status=200, response='OK', user=user)
+    return jsonify(user)
 
 
 @APP.route('/login')
