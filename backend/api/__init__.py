@@ -3,6 +3,7 @@
 import os
 
 from flask import Flask, jsonify, session, redirect, url_for
+from flask import make_response
 from authlib.integrations.flask_client import OAuth
 
 APP = Flask(__name__)
@@ -40,4 +41,6 @@ def _get_api_v0_callback():
     token = oauth.google.authorize_access_token()
     user = oauth.google.parse_id_token(token)
     session['user'] = user
-    return redirect('/')
+    resp = make_response(redirect('/api/v0/user'))
+    resp.set_cookie('email', user['email'])
+    return resp
