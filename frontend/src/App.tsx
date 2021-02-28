@@ -20,7 +20,7 @@ class App extends Component {
               href={
                 process.env.REACT_APP_API_HOST +
                 '/api/v0/login?redirect=' +
-                process.env.REACT_APP_HOST
+                window.location.href
               }
             >
               Log in!
