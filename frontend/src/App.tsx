@@ -1,26 +1,35 @@
 import './App.css';
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import Cookies from 'js-cookie';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+class App extends Component {
+  state = {
+    email:
+      Cookies.get('email') != null ? Cookies.get('email') : 'Not Logged In',
+    loggedIn: Cookies.get('email') != null
+  };
+
+  render() {
+    return (
+      <div className="App">
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          {this.state.loggedIn ? (
+            this.state.email
+          ) : (
+            <a
+              href={
+                process.env.REACT_APP_API_HOST +
+                '/api/v0/login?redirect=' +
+                process.env.REACT_APP_HOST
+              }
+            >
+              Log in!
+            </a>
+          )}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default App;
