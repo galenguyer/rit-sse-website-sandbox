@@ -1,20 +1,35 @@
 """ A small flask Hello World """
 
 import os
+import logging
 
 from flask import Flask, jsonify, session, redirect, url_for
 from flask import make_response, request
+from flask_sqlalchemy import SQLAlchemy
 from authlib.integrations.flask_client import OAuth
 
 APP = Flask(__name__)
 
-# Load file based configuration overrides if present
-if os.path.exists(os.path.join(os.getcwd(), 'config.py')):
-    APP.config.from_pyfile(os.path.join(os.getcwd(), 'config.py'))
-else:
-    APP.config.from_pyfile(os.path.join(os.getcwd(), 'config.env.py'))
+# Load default configuration and any environment variable overrides
+_root_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+APP.config.from_pyfile(os.path.join(_root_dir, 'config.env.py'))
 
-APP.secret_key = APP.config['SECRET_KEY']
+# Load file based configuration overrides if present
+_pyfile_config = os.path.join(_root_dir, 'config.py')
+if os.path.exists(_pyfile_config):
+    APP.config.from_pyfile(_pyfile_config)
+
+# Logger configuration
+logging.getLogger().setLevel(APP.config['LOG_LEVEL'])
+logging.getLogger().info('Launching rit-sse-api')
+
+db = SQLAlchemy(APP)
+logging.getLogger().info('SQLAlchemy pointed at ' + repr(db.engine.url))
+
+from . import models
+from .models import Link
+
+db.create_all()
 
 oauth = OAuth(APP)
 oauth.register(
@@ -46,3 +61,7 @@ def _get_api_v0_callback():
     session.pop('redirect')
     resp.set_cookie('email', user['email'])
     return resp
+
+@APP.route('/api/v0/golinks')
+def _get_api_v0_golinks():
+    return jsonify([link.to_dict() for link in Link.get_all()])
