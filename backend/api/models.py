@@ -2,8 +2,9 @@
 Defines models
 """
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import relationship
 
 from . import db
 
@@ -21,18 +22,19 @@ class Link(db.Model, SerializerMixin):
     def get_all(cls):
         return cls.query.all()
 
+class Quote(db.Model, SerializerMixin):
+    __tablename__ = 'quotes'
+    id = Column(Integer, primary_key=True)
+    body = Column(String)
+    description = Column(String)
+    approved = Column(Boolean, default=False)
+    tags = relationship('Tag')
 
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
 
-"""
-                          Table "public.links"
-   Column    |           Type           | Collation | Nullable | Default 
--------------+--------------------------+-----------+----------+---------
- shortLink   | character varying(255)   |           | not null | 
- longLink    | character varying(255)   |           | not null | 
- createdAt   | timestamp with time zone |           |          | 
- updatedAt   | timestamp with time zone |           |          | 
- description | character varying(255)   |           |          | 
- public      | boolean                  |           | not null | false
-Indexes:
-    "links_pkey" PRIMARY KEY, btree ("shortLink")
-"""
+class Tag(db.Model, SerializerMixin):
+    __tablename__ = 'quotes_tags'
+    tagName = Column(String(255), primary_key=True)
+    quoteId = Column(ForeignKey('quotes.id'), primary_key=True)

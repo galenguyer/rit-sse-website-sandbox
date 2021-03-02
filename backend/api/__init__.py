@@ -27,7 +27,7 @@ db = SQLAlchemy(APP)
 logging.getLogger().info('SQLAlchemy pointed at ' + repr(db.engine.url))
 
 from . import models
-from .models import Link
+from .models import Link, Quote
 
 db.create_all()
 
@@ -65,3 +65,7 @@ def _get_api_v0_callback():
 @APP.route('/api/v0/golinks')
 def _get_api_v0_golinks():
     return jsonify([link.to_dict() for link in Link.get_all()])
+
+@APP.route('/api/v0/quotes')
+def _get_api_v0_quotes():
+    return jsonify([quote.to_dict() for quote in Quote.get_all()])
